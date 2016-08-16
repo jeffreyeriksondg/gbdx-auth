@@ -4,6 +4,7 @@ standard_library.install_aliases()
 import os
 import base64
 import json
+from requests.auth import HTTPBasicAuth
 from configparser import ConfigParser
 from datetime import datetime
 
@@ -52,7 +53,8 @@ def session_from_kwargs(**kwargs):
                   username=kwargs.get('username'),
                   password=kwargs.get('password'),
                   client_id=kwargs.get('client_id'),
-                  client_secret=kwargs.get('client_secret'))
+                  client_secret=kwargs.get('client_secret'),
+                  auth=HTTPBasicAuth(kwargs.get('client_id'), kwargs.get('client_secret')))
     return s
 
 
@@ -106,7 +108,8 @@ def session_from_config(config_file):
                               username=cfg.get('gbdx','user_name'),
                               password=cfg.get('gbdx','user_password'),
                               client_id=client_id,
-                              client_secret=client_secret)
+                              client_secret=client_secret,
+                              auth=HTTPBasicAuth(client_id, client_secret))
         save_token(token)
 
     return s
